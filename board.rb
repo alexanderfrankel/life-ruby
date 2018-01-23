@@ -8,7 +8,7 @@ class Board
     height.times do
       row = []
       width.times do
-        row << "x"
+        row << Cell.new
       end
       @rows << row
     end

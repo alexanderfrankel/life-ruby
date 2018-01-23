@@ -14,12 +14,12 @@ describe Board do
     end
 
     it 'has the correct number of rows' do
-      expect(subject.rows.length).to eql(20)
+      expect(subject.rows.length).to equal(20)
     end
 
     it 'has the correct number of colums' do
       subject.rows.each do |row|
-        expect(row.length).to eql(20)
+        expect(row.length).to equal(20)
       end
     end
   end
