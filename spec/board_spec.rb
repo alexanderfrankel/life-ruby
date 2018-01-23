@@ -1,4 +1,4 @@
-require './board'
+require './lib/board'
 
 describe Board do
 

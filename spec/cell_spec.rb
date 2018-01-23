@@ -1,4 +1,4 @@
-require './cell'
+require './lib/cell'
 
 describe Cell do
 
