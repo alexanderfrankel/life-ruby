@@ -5,4 +5,8 @@ class Cell
   def initialize
     @live = false
   end
+
+  def alive!
+    @live = true
+  end
 end
