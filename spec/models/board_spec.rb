@@ -2,7 +2,7 @@ require './app/models/board'
 
 describe Board do
 
-  let!(:seed) {
+  let!(:seed_data) {
     [
       [1, 3],
       [7, 7],
@@ -13,17 +13,23 @@ describe Board do
   }
 
   subject do
-    Board.new(seed)
+    Board.new(seed_data)
   end
 
   describe'#initialize' do
-    it 'has the same number of rows as the highest seed row' do
-      expect(subject.rows.length).to equal(12)
+    it 'has the correct number of rows' do
+      expect(subject.rows.length).to equal(14)
     end
 
-    it 'has the same number of cols as the highest seed col' do
+    it 'has the correct number of cols' do
       subject.rows.each do |row|
-        expect(row.length).to equal(15)
+        expect(row.length).to equal(17)
+      end
+    end
+
+    it 'has the correct initial state' do
+      seed_data.each do |seed_cell|
+        expect(subject.get_cell(seed_cell[0], seed_cell[1]).alive?).to equal(true)
       end
     end
   end
