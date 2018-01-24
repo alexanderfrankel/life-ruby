@@ -27,7 +27,7 @@ class Board
   end
 
   def set_seed_cell_alive(seed_cell)
-    @rows[seed_cell.row_index][seed_cell.col_index].alive!
+    get_cell(seed_cell.row_index, seed_cell.col_index).alive!
   end
 
   def construct_rows
