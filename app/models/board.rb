@@ -4,10 +4,10 @@ class Board
 
   attr_reader :rows
 
-  def initialize(seed=[])
-    @seed = seed
-    @rows = []
-    construct!
+  def initialize(seed_data)
+    @seed = seedify(seed_data)
+    @rows = construct_rows
+    set_initial_board_state!
   end
 
   def get_cell(row, col)
@@ -20,22 +20,54 @@ class Board
 
   private
 
-  def construct!
-    (highest_seed_row + 1).times do |row_val|
-      row = []
-      (highest_seed_col + 1).times do |col_val|
-        row << Cell.new(row_val, col_val)
-      end
-      @rows << row
+  def set_initial_board_state!
+    @seed.each do |seed_cell|
+      set_seed_cell_alive(seed_cell)
     end
   end
 
-  def highest_seed_row
-    @seed.max_by(&:first).first
+  def set_seed_cell_alive(seed_cell)
+    @rows[seed_cell.row_index][seed_cell.col_index].alive!
   end
 
-  def highest_seed_col
-    @seed.max_by(&:last).last
+  def construct_rows
+    number_of_rows.times.with_object([]) do |row_index, row|
+      row << construct_single_row(row_index)
+    end
+  end
+
+  def construct_single_row(row_index)
+    number_of_cols.times.with_object([]) do |col_index, row|
+      row << create_cell(row_index, col_index)
+    end
+  end
+
+  def create_cell(row_index, col_index)
+    Cell.new(row_index, col_index)
+  end
+
+  def number_of_rows
+    highest_seed_row_index + 2
+  end
+
+  def number_of_cols
+    highest_seed_col_index + 2
+  end
+
+  def highest_seed_row_index
+    @seed.max_by(&:row_index).row_index
+  end
+
+  def highest_seed_col_index
+    @seed.max_by(&:col_index).col_index
+  end
+
+  Seed = Struct.new(:row_index, :col_index)
+
+  def seedify(seed_data)
+    seed_data.collect do |seed|
+      Seed.new(seed[0], seed[1])
+    end
   end
 
 end

@@ -10,14 +10,6 @@ describe Cell do
     it 'is dead' do
       expect(subject.alive?).to equal(false)
     end
-
-    it 'has correct row index value' do
-      expect(subject.row_index).to equal(1)
-    end
-
-    it 'has correct col index value' do
-      expect(subject.col_index).to equal(1)
-    end
   end
 
   describe '#alive?' do
