@@ -1,46 +1,58 @@
-require './board'
+require './app/models/board'
 
 class Game
 
+  attr_reader :board
+
   def initialize(seed=[])
+    @seed = seed
     @board = Board.new(seed)
-    seed.each do |alive_cell|
-      @board.rows[alive_cell[0] - 1][alive_cell[1] - 1].alive!
-    end
+    set_initial_board_state!
   end
 
-  def start!
-    until game_over?
-      render
+  def start_game!
+    loop do
+      GamesView.render(@board)
       tick!
       sleep 1
       system("clear")
-      sleep 1
     end
   end
 
   private
 
-  def game_over?
-    false
-  end
-
   def tick!
+    @seed = []
     @board.rows.each do |row|
       row.each do |cell|
-        transition_cell(cell)
+        live_neighbors = get_live_neighbors(cell)
+        toggle_cell = toggle_cell?(cell, live_neighbors)
+        if cell.alive? && !toggle_cell
+          @seed << [cell.row_index + 1, cell.col_index + 1]
+        elsif !cell.alive? && toggle_cell
+          @seed << [cell.row_index + 1, cell.col_index + 1]
+        end
       end
+    end
+    if @seed.any?
+      @board = Board.new(@seed)
+      set_initial_board_state!
+    end
+  end
+
+  def toggle_cell?(cell, live_neighbors)
+    case
+    when cell.alive? && live_neighbors.count < 2
+      true
+    when cell.alive? && (live_neighbors.count == 2 || live_neighbors.count == 3)
+    when cell.alive? && live_neighbors.count > 3
+      true
+    when !cell.alive? && live_neighbors.count == 3
+      true
     end
   end
 
   def transition_cell(cell)
-    live_neighbors = get_live_neighbors(cell)
-    case
-    when live_neighbors.count < 3
-      cell.dead!
-    when live_neighbors.count > 3
-      cell.dead!
-    end
   end
 
   def get_live_neighbors(cell)
@@ -94,20 +106,10 @@ class Game
     @board.get_cell(cell.row_index + 1, cell.col_index + 1)
   end
 
-  def render
-    @board.rows.each do |row|
-      row.each do |cell|
-        if cell.alive?
-          print 'x '
-        else
-          print '- '
-        end
-      end
-      puts
+  def set_initial_board_state!
+    @seed.each do |seed_cell|
+      @board.rows[seed_cell[0] - 1][seed_cell[1] - 1].alive!
     end
   end
 
 end
-
-game = Game.new([[2, 2], [4, 4]])
-game.start!

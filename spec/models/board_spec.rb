@@ -1,4 +1,4 @@
-require './board'
+require './app/models/board'
 
 describe Board do
 

@@ -1,4 +1,4 @@
-require './cell'
+require './app/models/cell'
 
 class Board
 
@@ -21,9 +21,9 @@ class Board
   private
 
   def construct!
-    highest_seed_row.times do |row_val|
+    (highest_seed_row + 1).times do |row_val|
       row = []
-      highest_seed_col.times do |col_val|
+      (highest_seed_col + 1).times do |col_val|
         row << Cell.new(row_val, col_val)
       end
       @rows << row
