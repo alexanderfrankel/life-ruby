@@ -2,8 +2,8 @@ class GamesView
 
   class << self
 
-    def render(game)
-      game.board.rows.each do |row|
+    def render(board)
+      board.rows.each do |row|
         render_row(row)
         render_newline
       end
