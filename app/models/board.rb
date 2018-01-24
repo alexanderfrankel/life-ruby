@@ -7,7 +7,7 @@ class Board
   def initialize(seed_data)
     @seed = seedify(seed_data)
     @rows = construct_rows
-    set_initial_board_state!
+    set_initial_state!
   end
 
   def get_cell(row, col)
@@ -20,7 +20,7 @@ class Board
 
   private
 
-  def set_initial_board_state!
+  def set_initial_state!
     @seed.each do |seed_cell|
       set_seed_cell_alive(seed_cell)
     end
